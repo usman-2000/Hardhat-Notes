@@ -157,3 +157,38 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 it is in aave v3 , It will do like:
 	hey if you are network A use this address, if you are network B use this address.
 For the ADDRESS we will copy the pricefeed address for that network. In our case we will use goerli or sepolia , then go to the chainlink and find the address of eth/usd of goerli or sepolia.	If we want to deploy on sepolia we will create a new file called helper-hardhat-config.js, in this file we will create an object of network config and in that we will use chain id and then name and address of pricefeed which we get from chainlink. After that just export it so that other files can use it.
+
+
+-------------------------------------------------- Deploy Mock -------------------------------------------------------------------
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+import "@chainlink/contracts/src/v0.6/tests/MockV3Aggregator.sol";
+
+
+when you are going to compile , this error will occur:
+------------------------------------
+The Solidity version pragma statement in these files doesn't match any of the configured compilers in your config. Change the pragma or configure additional compiler versions in your hardhat config.
+
+  * contracts/test/MockV3Aggregator.sol (^0.6.0)
+  * @chainlink/contracts/src/v0.6/tests/MockV3Aggregator.sol (^0.6.0)
+  * @chainlink/contracts/src/v0.6/interfaces/AggregatorV2V3Interface.sol (^0.6.0)
+  * @chainlink/contracts/src/v0.6/interfaces/AggregatorV3Interface.sol (^0.6.0)
+  * @chainlink/contracts/src/v0.6/interfaces/AggregatorInterface.sol (^0.6.0)
+
+To learn more, run the command again with --verbose
+------------------------------------
+
+So in order to get rid of it , you can go to hardhat config file and make an array of versions. like this:
+
+  solidity: {
+    compilers: [{ version: "0.8.8" }, { version: "0.6.6" }],
+  }
+
+
+The way we only run our deploy scripts:
+
+module.exports.tags = ["all", "mocks"];
+
+
